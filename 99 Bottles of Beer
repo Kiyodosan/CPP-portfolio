@@ -1,0 +1,63 @@
+// This program outputs the lyrics to the song "Ninety-Nine Bottles of Beer".
+
+#include <iostream>
+using namespace std;
+
+void lyrics(string x[], string y[], string z[]);
+
+int main(){
+    string tens[] = {"Ninety", "Eighty", "Seventy", "Sixty", "Fifty", "Forty", "Thirty", "Twenty"};
+    string ones[] = {"Nine", "Eight", "Seven", "Six", "Five", "Four", "Three", "Two", "One"};
+    string teens[] = {"Nineteen", "Eighteen", "Seventeen", "Sixteen", "Fifteen", "Fourteen", "Thirteen", "Twelve", "Eleven", "Ten"};
+
+    lyrics(tens, ones, teens);
+
+    return 0;
+}
+
+void lyrics(string x[], string y[], string z[]){
+    for(int i=0;i<8;i++){
+        for(int j=0;j<9;j++){
+            cout << x[i] << "-" << y[j] << " bottles of beer on the wall,\n"
+                 << x[i] << "-" << y[j] << " bottles of beer,\n"
+                 << "Take one down, pass it around,\n";
+            if(y[j]=="One"){
+                cout << x[i] << " bottles of beer on the wall.\n\n"
+                     << x[i] << " bottles of beer on the wall.\n"
+                     << x[i] << " bottles of beer,\n"
+                     << "Take one down, pass it around,\n";
+                if(x[i]=="Twenty" && y[j]=="One")
+                    cout << z[0] << " bottles of beer on the wall.\n\n";
+                else
+                    cout << x[i+1] << "-" << y[0] << " bottles of beer on the wall.\n\n";
+            }
+            else
+                cout << x[i] << "-" << y[j+1] << " bottles of beer on the wall.\n\n";
+        }
+    }
+    for(int i=0;i<10;i++){
+        cout << z[i] << " bottles of beer on the wall.\n"
+             << z[i] << " bottles of beer,\n"
+             << "Take one down, pass it around,\n";
+        if(z[i]=="Ten")
+            cout << y[0] << " bottles of beer on the wall.\n\n";
+        else
+            cout << z[i+1] << " bottles of beer on the wall.\n\n";
+    }
+    for(int i=0;i<9;i++){
+        if(y[i]=="One")
+            cout << y[i] << " bottle of beer on the wall.\n"
+                 << y[i] << " bottle of beer,\n"
+                 << "Take one down, pass it around,\n";
+        else{
+            cout << y[i] << " bottles of beer on the wall.\n"
+                 << y[i] << " bottles of beer,\n"
+                 << "Take one down, pass it around,\n";
+            if(y[i+1]=="One")
+                cout << y[i+1] << " bottle of beer on the wall.\n\n";
+            else
+            cout << y[i+1] << " bottles of beer on the wall.\n\n";
+        }
+    }
+    cout << "Zero bottles of beer on the wall.\n";
+}
