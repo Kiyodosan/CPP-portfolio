@@ -1,0 +1,182 @@
+// This program utlizes access modifiers to abstract data about a vehicle and its owner.
+
+#include <iostream>
+using namespace std;
+
+class Person{
+public:
+    Person();
+    Person(string theName);
+    Person(const Person &object);
+    string getName() const;
+    Person& operator =(const Person &thePerson);
+    friend istream &operator >>(istream &ins, Person &object);
+    friend ostream &operator <<(ostream &outs, const Person &object);
+private:
+    string name;    // Owner
+};
+
+class Vehicle{
+public:
+    Vehicle();
+    Vehicle(string theName, int theCylinders, Person theOwner);
+    Vehicle(const Vehicle &object);
+    Vehicle &operator =(const Vehicle &theVehicle);
+    string getName() const;
+    int getCylinders() const;
+    Person getOwner() const;
+    void setName(string theName);
+    void setCylinders(int theCylinders);
+    void setOwner(Person theOwner);
+private:
+    string name;    // Manufacturer
+    int cylinders;
+    Person owner;
+};
+
+class Car : public Vehicle{
+public:
+    Car();
+    Car(string theName, int theCylinders, Person theOwner, string theModel);
+    string getModel() const;
+    void setModel(string theModel);
+private:
+    string model;
+};
+
+class SportsCar : public Car{
+public:
+    SportsCar();
+    SportsCar(string theName, int theCylinders, Person theOwner, string theModel, int theTopSpeed);
+    int getTopSpeed() const;
+    void setTopSpeed(int theTopSpeed);
+    friend ostream &operator <<(ostream &outs, const SportsCar &object);
+private:
+    int topSpeed;   // In MPH
+};
+
+int main(){
+    Person p1("George"), p2;
+    p2 = p1;
+    cout << p2.getName() << endl;
+
+    Person p3;
+    cout << "Enter p3 name: ";
+    cin >> p3;
+    cout << p3 << endl << endl;
+
+    SportsCar s;
+    s.setName("Honda");
+    s.setCylinders(4);
+    s.setOwner(p2);
+    s.setModel("Civic");
+    s.setTopSpeed(180);
+    cout << s;
+    return 0;
+}
+
+Person::Person() : name("No name"){
+}
+
+Person::Person(string theName) : name(theName){
+}
+
+Person::Person(const Person &object){
+    name = object.name;
+}
+
+string Person::getName() const{
+    return name;
+}
+
+Person& Person::operator =(const Person &thePerson){
+    name = thePerson.name;
+}
+
+istream &operator >>(istream &ins, Person &object){
+    ins >> object.name;
+    return ins;
+}
+ostream &operator <<(ostream &outs, const Person &object){
+    outs << object.name;
+    return outs;
+}
+
+Vehicle::Vehicle() : name("No manufacturer"), cylinders(0), owner("No owner"){
+}
+
+Vehicle::Vehicle(string theName, int theCylinders, Person theOwner) : name(theName), cylinders(theCylinders), owner(theOwner){
+}
+
+Vehicle::Vehicle(const Vehicle &object){
+    name = object.name;
+    cylinders = object.cylinders;
+    owner = object.owner;
+}
+
+Vehicle& Vehicle::operator =(const Vehicle &theVehicle){
+    name = theVehicle.name;
+    cylinders = theVehicle.cylinders;
+    owner = theVehicle.owner;
+}
+
+string Vehicle::getName() const{
+    return name;
+}
+
+int Vehicle::getCylinders() const{
+    return cylinders;
+}
+
+Person Vehicle::getOwner() const{
+    return owner;
+}
+
+void Vehicle::setName(string theName){
+    name = theName;
+}
+
+void Vehicle::setCylinders(int theCylinders){
+    cylinders = theCylinders;
+}
+
+void Vehicle::setOwner(Person theOwner){
+    owner = theOwner;
+}
+
+Car::Car() : Vehicle(), model("No model"){
+}
+
+Car::Car(string theName, int theCylinders, Person theOwner, string theModel) : Vehicle(theName, theCylinders, theOwner), model(theModel){
+}
+
+string Car::getModel() const{
+    return model;
+}
+
+void Car::setModel(string theModel){
+    model = theModel;
+}
+
+SportsCar::SportsCar() : Car(), topSpeed(0){
+}
+
+SportsCar::SportsCar(string theName, int theCylinders, Person theOwner, string theModel, int theTopSpeed) : Car(theName, theCylinders, theOwner, theModel), topSpeed(theTopSpeed){
+}
+
+int SportsCar::getTopSpeed() const{
+    return topSpeed;
+}
+
+void SportsCar::setTopSpeed(int theTopSpeed){
+    topSpeed = theTopSpeed;
+}
+
+ostream &operator <<(ostream &outs, const SportsCar &object){
+    outs << "Owner: " << object.getOwner() << endl;
+    outs << "Manufacturer: " << object.getName() << endl;
+    outs << "Model: " << object.getModel() << endl;
+    outs << "# of Cylinders: " << object.getCylinders() << endl;
+    outs << "Top Speed: " << object.getTopSpeed() << " MPH" << endl;
+    return outs;
+}
