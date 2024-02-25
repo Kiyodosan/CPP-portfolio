@@ -1,5 +1,5 @@
 
-# CPP Portfolio
+# C++ Portfolio
 
 ### Demos from Santa Monica College
 
