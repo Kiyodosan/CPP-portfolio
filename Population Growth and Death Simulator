@@ -1,0 +1,104 @@
+// This program is a randomly generated population simulator, split between periods of time.
+// Populated tiles surrounded by a few others will grow. Overpopulated adjacent tiles will "die". Isolated tiles will also "die".
+
+#include <iostream>
+#include <ctime>
+using namespace std;
+
+const int ROW = 22;
+
+void firstGen(char arr[][80]);
+void display(const char arr[][80]);
+void nextGen(char &x);
+void generation(char arr[][80]);
+int neighborCt(const char arr[][80], int r, int c);
+void deathPhase(char arr[][80], int r, int c, int n);
+void birthPhase(char arr[][80], int r, int c, int n);
+
+int main(){
+    srand(time(NULL));
+    char world[ROW][80], retry;
+    int period = 0;
+    firstGen(world);
+    cout << "Period " << period << endl << endl;
+    display(world);
+    nextGen(retry);
+    while(retry=='\n'){
+        period++;
+        cout << "Period " << period << endl << endl;
+        generation(world);
+        display(world);
+        nextGen(retry);
+    }
+    cout << "\nWorld Ended\n";
+    return 0;
+}
+
+void firstGen(char arr[][80]){
+    for(int i=0;i<ROW;i++){
+        for(int j=0;j<80;j++){
+            bool life = rand() % 2;
+            if(life)
+                arr[i][j] = '*';
+            else
+                arr[i][j] = ' ';
+        }
+    }
+}
+
+void display(const char arr[][80]){
+    for(int i=0;i<ROW;i++){
+        for(int j=0;j<80;j++)
+            cout << arr[i][j];
+        cout << endl;
+    }
+    cout << endl;
+}
+
+void nextGen(char &x){
+    cout << "Would you like to see the next generation?\n"
+             << "Press \"Enter\" to accept.\n";
+    cin.get(x);
+}
+
+void generation(char arr[][80]){
+    int neighbors;
+    for(int i=0;i<ROW;i++){             // Death phase.
+        for(int j=0;j<80;j++){
+            neighbors = neighborCt(arr, i, j);
+            deathPhase(arr, i, j, neighbors);
+        }
+    }
+    for(int i=0;i<ROW;i++){             // Birth phase.
+        for(int j=0;j<80;j++){
+            neighbors = neighborCt(arr, i, j);
+            birthPhase(arr, i, j, neighbors);
+        }
+    }
+}
+
+int neighborCt(const char arr[][80], int r, int c){
+    int n = 0;
+    for(int i=-1;i<2;i++){              // Might have issue with out-of-bounds range.
+        for(int j=-1;j<2;j++){
+            if(arr[r+i][c+j]=='*')
+                n++;
+        }
+    }
+    if(arr[r][c]=='*')                  // Excludes its own tile if alive.
+        return n-1;
+    else
+        return n;
+}
+
+void deathPhase(char arr[][80], int r, int c, int n){
+    if(n<=1)
+        arr[r][c] = ' ';
+    else if(n>3)
+        arr[r][c] = ' ';
+}
+
+void birthPhase(char arr[][80], int r, int c, int n){
+    if(n==3)
+        arr[r][c] = '*';
+}
