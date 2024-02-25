@@ -1,0 +1,93 @@
+// This program simulates the outcome of a randomized Wild West shootout.
+
+#include <iostream>
+#include <ctime>
+#include <string>
+using namespace std;
+
+void startDuel(string n[], int &x, int &y, int &z);
+// Takes 3 names and win rate counts.
+// Determines a winner and increments their win rate counter.
+void shoot(bool &targetAlive, double accuracy);
+// Takes the accuracy of the shooter.
+// Randomly determines if the target dies (based on accuracy).
+void outcome(string s);
+// Takes a name.
+// Displays the name as the winner.
+void probability(string n[], int x, int y, int z);
+// Takes 3 names and win rate counts, assuming 1000 duels have been played.
+// Calculates and displays the win rate percentage for each name.
+
+int main(){
+    srand(time(NULL));
+    string puzzler[] = {"Aaron", "Bob", "Charlie"};
+    int winRateA = 0, winRateB = 0, winRateC = 0;
+    //startDuel(puzzler, winRateA, winRateB, winRateC);
+    for(int i=0;i<1000;i++)
+        startDuel(puzzler, winRateA, winRateB, winRateC);
+    probability(puzzler, winRateA, winRateB, winRateC);
+    return 0;
+}
+
+void startDuel(string n[], int &x, int &y, int &z){
+    cout << "Duel begins!\n";
+    bool isAlive[] = {true, true, true};
+    double acc[] = {0.333333, 0.5, 1};
+    for(int i=1;i<3;i++){                           // In the case that Aaron misses on purpose, Bob will shoot next.
+        if(isAlive[i]){
+            if(isAlive[2] && n[2]!=n[i])
+                shoot(isAlive[2], acc[i]);
+            else if(isAlive[1] && n[1]!=n[i])
+                shoot(isAlive[1], acc[i]);
+            else
+                shoot(isAlive[0], acc[i]);
+        }
+    }
+    while((isAlive[0] && isAlive[1]) || (isAlive[1] && isAlive[2]) || (isAlive[2] && isAlive[0])){
+        for(int i=0;i<3;i++){
+            if(isAlive[i]){                         // Checks if the shooter is alive before shooting. Otherwise next shooter goes.
+                if(isAlive[2] && n[2]!=n[i])
+                    shoot(isAlive[2], acc[i]);
+                else if(isAlive[1] && n[1]!=n[i])
+                    shoot(isAlive[1], acc[i]);
+                else
+                    shoot(isAlive[0], acc[i]);
+            }
+        }
+    }
+    if(isAlive[0]){
+        outcome(n[0]);
+        x++;
+    }
+    else if(isAlive[1]){
+        outcome(n[1]);
+        y++;
+    }
+    else{
+        outcome(n[2]);
+        z++;
+    }
+}
+
+void shoot(bool &targetAlive, double accuracy){
+    if((rand() % 2)<accuracy)
+        targetAlive = false;
+}
+
+void outcome(string s){
+    cout << s << " is the winner!\n\n";
+}
+
+void probability(string n[], int x, int y, int z){
+    double a, b, c;
+    a = x / 10.0;         // Divide by 1000, multiply by 100 to get percentage.
+    b = y / 10.0;
+    c = z / 10.0;
+    cout.setf(ios::fixed);
+    cout.setf(ios::showpoint);
+    cout.precision(1);
+    cout << "Win rate probabilities for each puzzler:\n"
+         << n[0] << ": " << a << "%" << endl
+         << n[1] << ": " << b << "%" << endl
+         << n[2] << ": " << c << "%" << endl;
+}
