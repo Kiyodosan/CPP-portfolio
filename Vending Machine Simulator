@@ -1,0 +1,30 @@
+// This program simulates a vending machine that receives input for coins and outputs change (if applicable).
+
+#include <iostream>
+using namespace std;
+
+int main(){
+    double total = 0, curVal;
+
+    cout << "Deep fried twinkies: $3.50 each\n"
+         << "**This machine only accepts dollar coins, quarters, dimes, and nickels**\n\n"
+         << "Input money here:\n";
+
+    cout.setf(ios::fixed);
+    cout.setf(ios::showpoint);
+    cout.precision(2);
+
+    while(total<3.5){
+        cin >> curVal;
+        total += curVal;
+        cout << "Amount added: $" << total << endl;
+        if(total<3.5)
+            cout << "$" << 3.5 - total << " remaining\n\n";
+    }
+
+    cout << "\nEnjoy your deep fried twinkie!\n";
+    if(total>3.5)
+        cout << "Your change is: $" << total - 3.5 << endl;
+
+    return 0;
+}
