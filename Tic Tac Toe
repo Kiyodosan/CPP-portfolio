@@ -1,0 +1,72 @@
+// This program is a Tic Tac Toe simulator for 2 players
+
+#include <iostream>
+using namespace std;
+
+void clearBoard(char arr[][3]);
+void ticTacToe(char arr[][3]);
+void showBoard(const char arr[][3]);
+void selection(char player, char c, char arr[][3]);
+
+int main(){
+    char board[3][3];
+    clearBoard(board);
+    ticTacToe(board);
+    return 0;
+}
+
+void clearBoard(char arr[][3]){
+    arr[0][0] = '1'; arr[0][1] = '2'; arr[0][2] = '3';
+    arr[1][0] = '4'; arr[1][1] = '5'; arr[1][2] = '6';
+    arr[2][0] = '7'; arr[2][1] = '8'; arr[2][2] = '9';
+}
+
+void ticTacToe(char arr[][3]){
+    char choice, p1 = 'X', p2 = 'O';
+    cout << "Tic Tac Toe\n"
+         << "Game Start:\n\n";
+    showBoard(arr);
+    bool p1Turn = true;
+    int marks = 0;
+    while(marks<9){                     // For max number of moves.
+        if(p1Turn){
+            cout << "Player 1 - Choose a space: ";
+            cin >> choice;
+            selection(p1, choice, arr);
+            cout << endl;
+            showBoard(arr);
+            marks++;
+            p1Turn = false;
+        }
+        else{
+            cout << "Player 2 - Choose a space: ";
+            cin >> choice;
+            selection(p2, choice, arr);
+            cout << endl;
+            showBoard(arr);
+            marks++;
+            p1Turn = true;
+        }
+    }
+    cout << "Game Over\n";
+}
+
+void showBoard(const char arr[][3]){
+    cout << arr[0][0] << " " << arr[0][1] << " " << arr[0][2] << endl
+         << arr[1][0] << " " << arr[1][1] << " " << arr[1][2] << endl
+         << arr[2][0] << " " << arr[2][1] << " " << arr[2][2] << endl << endl;
+}
+
+void selection(char player, char c, char arr[][3]){
+    switch(c){
+        case '1': arr[0][0] = player; break;
+        case '2': arr[0][1] = player; break;
+        case '3': arr[0][2] = player; break;
+        case '4': arr[1][0] = player; break;
+        case '5': arr[1][1] = player; break;
+        case '6': arr[1][2] = player; break;
+        case '7': arr[2][0] = player; break;
+        case '8': arr[2][1] = player; break;
+        case '9': arr[2][2] = player; break;
+    }
+}
