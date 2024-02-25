@@ -1,0 +1,150 @@
+// This program simulates a calculator that computes simple calculations on multiple numbers and provides a total.
+// It utilizes a stack to store and use each number.
+
+#include <iostream>
+#include <cstddef>
+#include <string>
+using namespace std;
+
+struct StackFrame{
+    int data;
+    StackFrame *link;
+};
+typedef StackFrame *StackFramePtr;
+
+class Stack{
+public:
+    Stack();
+    Stack(const Stack &aStack);
+    ~Stack();
+    void push(int theSymbol);
+    int pop();
+    bool empty() const;
+    void add();
+    void subtract();
+    void multiply();
+    void divide();
+private:
+    StackFramePtr top;
+};
+
+int main(){
+    Stack calculator;
+    cout << "RPN Calculator\n\n";
+    string s;
+    cin >> s;
+    while(s!="q" && s!="Q"){
+        if(s=="+" || s=="-" || s=="*" || s=="/"){
+            if(s=="+")
+                calculator.add();
+            else if(s=="-")
+                calculator.subtract();
+            else if(s=="*")
+                calculator.multiply();
+            else
+                calculator.divide();
+        }
+        else{
+            bool isNumber = true;
+
+            for(int i=0;i<s.length();i++){
+                if(!isdigit(s[i]))
+                    isNumber = false;
+            }
+
+            if(isNumber){
+                //cout << s << " added\n";
+                calculator.push(stoi(s));
+            }
+        }
+        cin >> s;
+    }
+    int total = calculator.pop();
+    cout << "Total value: " << total;
+
+    return 0;
+}
+
+Stack::Stack() : top(NULL){
+}
+
+Stack::Stack(const Stack &aStack){
+    if(aStack.top==NULL){
+        top = NULL;
+    }
+    else{
+        StackFramePtr temp = aStack.top;
+        StackFramePtr end;
+        end = new StackFrame;
+        end->data = temp->data;
+        top = end;
+        temp = temp->link;
+        while(temp!=NULL){
+            end->link = new StackFrame;
+            end = end->link;
+            end->data = temp->data;
+            temp = temp->link;
+        }
+        end->link = NULL;
+    }
+}
+
+Stack::~Stack(){
+    int next;
+    while(!empty())
+        next = pop();
+}
+
+void Stack::push(int theSymbol){
+    StackFramePtr tempPtr;
+    tempPtr = new StackFrame;
+    tempPtr->data = theSymbol;
+    tempPtr->link = top;
+    top = tempPtr;
+}
+
+int Stack::pop(){
+    if(empty()){
+        cout << "Error: popping an empty stack.\n";
+        exit(1);
+    }
+    int result = top->data;
+
+    StackFramePtr tempPtr;
+    tempPtr = top;
+    top = top->link;
+    delete tempPtr;
+    return result;
+}
+
+bool Stack::empty() const{
+    return (top==NULL);
+}
+
+void Stack::add(){
+    int x = pop();
+    int y = pop();
+    int result = x + y;
+    push(result);
+}
+
+void Stack::subtract(){
+    int x = pop();
+    int y = pop();
+    int result = y - x;
+    push(result);
+}
+
+void Stack::multiply(){
+    int x = pop();
+    int y = pop();
+    int result = x * y;
+    push(result);
+}
+
+void Stack::divide(){
+    int x = pop();
+    int y = pop();
+    int result = y / x;
+    push(result);
+}
