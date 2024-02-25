@@ -1,0 +1,151 @@
+// This program is a computer lab menu that allows users to log in/out of a computer station, check for available stations, and find the login status of a specified user.
+
+#include <iostream>
+using namespace std;
+
+void menu(int **p, int n);
+void logIn(int **p, int n);
+void logOut(int **p, int n);
+void openMap(int **p, int n);
+void findUser(int **p, int n);
+
+int main(){
+    typedef int *IntPtr;
+    IntPtr *lab = new IntPtr[4];
+    lab[0] = new int[5];
+    for(int i=0;i<5;i++){
+        lab[0][i] = 0;
+    }
+    lab[1] = new int[6];
+    for(int i=0;i<6;i++){
+        lab[0][i] = 0;
+    }
+    lab[2] = new int[4];
+    for(int i=0;i<4;i++){
+        lab[0][i] = 0;
+    }
+    lab[3] = new int[3];
+    for(int i=0;i<3;i++){
+        lab[0][i] = 0;
+    }
+
+    lab[2][1] = 49193;          // Test numbers.
+    lab[3][0] = 99577;
+
+    menu(lab, 4);
+    for(int i=0;i<4;i++){
+        delete [] lab[i];
+    }
+    delete [] lab;
+    return 0;
+}
+
+void menu(int **p, int n){
+    cout << "(1) Login.\n"
+         << "(2) Logout.\n"
+         << "(3) Check for available computer stations.\n"
+         << "(4) Find a user's login status.\n";
+    int optionSelect;
+    cin >> optionSelect;
+    cout << endl;
+    switch(optionSelect){
+        case 1: logIn(p, n); break;
+        case 2: logOut(p, n); break;
+        case 3: openMap(p, n); break;
+        case 4: findUser(p, n); break;
+    }
+}
+
+void logIn(int **p, int n){
+    int userID, labNum, cpuNum;
+    cout << "Enter user ID: ";
+    cin >> userID;
+    cout << "Enter Lab #: ";
+    cin >> labNum;
+    cout << "Enter Computer Station #: ";
+    cin >> cpuNum;
+    p[labNum-1][cpuNum-1] = userID;
+    cout << "User " << userID << " logged into computer " << labNum << "-" << cpuNum << endl;
+    // cout << "p value: " << p[labNum-1][cpuNum-1] << endl;
+}
+
+void logOut(int **p, int n){
+    int userID;
+    cout << "Enter user ID: ";
+    cin >> userID;
+    bool found = false;
+    for(int i=0;i<n;i++){
+        for(int j=0;j<6;j++){
+            if(userID==p[i][j]){
+                p[i][j] = 0;
+                found = true;
+                cout << "User " << userID << " has logged out.\n";
+            }
+        }
+    }
+    if(!found){
+        cout << "User not found\n";
+    }
+}
+
+void openMap(int **p, int n){
+    cout << "Lab Number Computer Stations\n";
+    cout << 1 << "      \t   ";
+    for(int i=0;i<5;i++){
+        if(p[0][i]<10000 || p[0][i]>99999){
+            cout << i+1 << ": empty ";
+        }
+        else{
+            cout << i+1 << ": " << p[0][i] << " ";
+        }
+    }
+    cout << endl;
+    cout << 2 << "      \t   ";
+    for(int i=0;i<6;i++){
+        if(p[1][i]<10000 || p[1][i]>99999){
+            cout << i+1 << ": empty ";
+        }
+        else{
+            cout << i+1 << ": " << p[1][i] << " ";
+        }
+    }
+    cout << endl;
+    cout << 3 << "      \t   ";
+    for(int i=0;i<4;i++){
+        if(p[2][i]<10000 || p[2][i]>99999){
+            cout << i+1 << ": empty ";
+        }
+        else{
+            cout << i+1 << ": " << p[2][i] << " ";
+        }
+    }
+    cout << endl;
+    cout << 4 << "      \t   ";
+    for(int i=0;i<3;i++){
+        if(p[3][i]<10000 || p[3][i]>99999){
+            cout << i+1 << ": empty ";
+        }
+        else{
+            cout << i+1 << ": " << p[3][i] << " ";
+        }
+    }
+    cout << endl;
+}
+
+void findUser(int **p, int n){
+    cout << "Enter user ID: ";
+    int userID;
+    cin >> userID;
+    bool found = false;
+    for(int i=0;i<n;i++){
+        for(int j=0;j<6;j++){
+            if(userID==p[i][j]){
+                cout << "Lab: " << i+1 << "\tStation: " << j+1 << endl;
+                found = true;
+            }
+        }
+    }
+    if(!found){
+        cout << "User not found\n";
+    }
+}
